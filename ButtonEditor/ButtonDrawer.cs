@@ -13,7 +13,7 @@ namespace DRL {
 		/// containing the provided label and [optionally] tooltip.
 		/// Tooltip could be modified to reflect the unusual state of the button.
 		/// </summary>
-		private static GUIContent GenButtonContent(ButtonAttribute attr) {
+		private static GUIContent ButtonContent(ButtonAttribute attr) {
 			GUIContent buttonText = new GUIContent(attr.Label);
 			var tooltip = attr.Tooltip;
 
@@ -36,7 +36,7 @@ namespace DRL {
 		/// It's based on the default stule for inspector button, but has it's <see cref="GUIStyle.wordWrap"/> set
 		/// acctordingly to the given button content.
 		/// </param>
-		private static void GenButtonRect(
+		private static void ButtonRectAndStyle(
 			ButtonAttribute attr, Rect position, GUIContent buttonText,
 			out Rect buttonRect, out GUIStyle style
 		) {
@@ -73,10 +73,10 @@ namespace DRL {
 
 		public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label) {
 			var attr = (ButtonAttribute)attribute;
-			var buttonText = GenButtonContent(attr);
+			var buttonText = ButtonContent(attr);
 
 			Rect buttonRect; GUIStyle style;
-			GenButtonRect(attr, position, buttonText, out buttonRect, out style);
+			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
 		}
 
 	}
