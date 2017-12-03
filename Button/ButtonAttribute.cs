@@ -3,6 +3,15 @@ using UnityEngine;
 
 namespace DRL
 {
+	/// <summary>
+	/// This attribute adds a button before the affected field.
+	/// You also need to define a static method which will actually perform
+	/// whatever you need to be done on button click.
+	/// This method takes exactly one argument of type <see cref="UnityEngine.Object"/>.
+	/// In the method, you'll get your class instance itself via this argument,
+	/// so you may need to cast it back tou your specific class type.
+	/// This static function is passed as the 1st required parameter for this attribute.
+	/// </summary>
 	public class ButtonAttribute : PropertyAttribute {
 		public readonly Action<UnityEngine.Object> ActionMethod;
 		public readonly string Label;
