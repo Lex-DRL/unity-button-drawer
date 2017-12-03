@@ -21,7 +21,7 @@ namespace DRL {
 			/// The button is in the inspector with multi-selection.
 			/// </summary>
 			Multi = 1,
-			Error = 2
+			//Error = 2 // TODO: implement auto-detection of potential errors on button press
 		}
 
 		private const string DefalutText = "DO!";
