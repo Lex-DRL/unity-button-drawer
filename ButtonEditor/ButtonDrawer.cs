@@ -4,6 +4,7 @@ using UnityEditor;
 
 namespace DRL {
 	[CustomPropertyDrawer(typeof(ButtonAttribute))]
+	[CanEditMultipleObjects]
 	public class ButtonDrawer : PropertyDrawer
 	{
 		#region Private constants
@@ -25,8 +26,8 @@ namespace DRL {
 		}
 
 		private const string DefalutText = "DO!";
-		private const string MultiMsg = "Multiple objects selected";
-		private static readonly Color MultiColor = new Color(0.8f, 0.5f, 0.1f);
+		private const string MultiMsg = "[Multiple objects selected]";
+		private static readonly Color MultiColor = new Color(1.0f, 0.7f, 0.4f);
 
 		private const BindingFlags GetMethodFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
 
@@ -43,26 +44,26 @@ namespace DRL {
 			string text = attr.Label.Trim();
 			if (string.IsNullOrEmpty(text))
 				text = DefalutText;
-
-			GUIContent buttonText = new GUIContent(text);
 			var tooltip = attr.Tooltip;
 
-			// modify tooltip for Multi-mode:
+			// modify text for non-regular modes:
 			if (state == State.Error) {
-				string msg = "ERROR: " + errorMessage;
+				string msg = string.Format("[ERROR: {0}]", errorMessage);
 				tooltip =
 					string.IsNullOrEmpty(tooltip) ?
 					msg :
-					string.Format("[{0}]\n{1}", msg, tooltip)
+					msg + "\n" + tooltip
 				;
+				text = "[ERROR] " + text;
 			} else if (state == State.Multi) {
 				tooltip =
 					string.IsNullOrEmpty(tooltip) ?
 					MultiMsg :
-					string.Format("[{0}]\n{1}", MultiMsg, tooltip)
+					string.Format("{0}\n{1}", tooltip, MultiMsg)
 				;
 			}
 
+			GUIContent buttonText = new GUIContent(text);
 			if (!string.IsNullOrEmpty(tooltip))
 				buttonText.tooltip = tooltip;
 			return buttonText;
@@ -193,7 +194,7 @@ namespace DRL {
 				var serObj = prop.serializedObject;
 				targets = serObj.targetObjects;
 				numTargets = targets.Length;
-				isMulti = serObj.isEditingMultipleObjects || numTargets > 0;
+				isMulti = serObj.isEditingMultipleObjects || numTargets > 1;
 				isError = IsErrorState(methodName, targets, out errorMessage);
 				state =
 					isError ?
@@ -210,7 +211,6 @@ namespace DRL {
 			// the button may be disabled:
 			using (new EditorGUI.DisabledScope(isError)) {
 				// Now, actually draw the button...
-				//isMulti = true;
 				var oldColor = GUI.backgroundColor;
 				if (isMulti) {
 					GUI.backgroundColor = MultiColor;
