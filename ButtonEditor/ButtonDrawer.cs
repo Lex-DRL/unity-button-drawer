@@ -7,6 +7,8 @@ namespace DRL {
 	[CanEditMultipleObjects]
 	public class ButtonDrawer : PropertyDrawer
 	{
+		private float _height = 0.0f;
+
 		#region Private constants
 
 		/// <summary>
@@ -82,7 +84,7 @@ namespace DRL {
 		/// It's based on the default stule for inspector button, but has it's <see cref="GUIStyle.wordWrap"/> set
 		/// acctordingly to the given button content.
 		/// </param>
-		private static void ButtonRectAndStyle(
+		private void ButtonRectAndStyle(
 			ButtonAttribute attr, Rect position, GUIContent buttonText,
 			out Rect buttonRect, out GUIStyle style
 		) {
@@ -102,7 +104,7 @@ namespace DRL {
 			// ... and to calculate the height:
 			if (expectedSize.x > width)
 				style.wordWrap = true;
-			float height = Mathf.Max(
+			_height = Mathf.Max(
 				style.CalcHeight(buttonText, width),
 				position.height
 			);
@@ -112,8 +114,15 @@ namespace DRL {
 				position.x + Mathf.Max(srcWidth - width, 0.0f) * 0.5f,
 				position.y,
 				width,
-				height
+				_height
 			);
+		}
+
+		private Rect ButtonRect(ButtonAttribute attr, Rect position, GUIContent buttonText) {
+			Rect buttonRect;
+			GUIStyle style;
+			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
+			return buttonRect;
 		}
 
 		/// <summary>
@@ -213,27 +222,19 @@ namespace DRL {
 			var methodName = attr.Method;
 
 			// Detect the state of the buton, which affects it look:
-			State state;
 			Object[] targets;
 			int numTargets;
 			bool isMulti, isError;
 			string errorMessage;
-			{
-				var serObj = prop.serializedObject;
-				targets = serObj.targetObjects;
-				numTargets = targets.Length;
-				isMulti = serObj.isEditingMultipleObjects || numTargets > 1;
-				isError = IsErrorState(methodName, targets, out errorMessage);
-				state =
-					isError ?
-					State.Error :
-					(isMulti ? State.Multi : State.Normal)
-				;
-			}
+			var state = GetState(
+				prop, methodName,
+				out targets, out numTargets, out isMulti, out isError, out errorMessage
+			);
 
 			// Prepare rect, style and content:
 			var buttonText = ButtonContent(attr, state, errorMessage);
-			Rect buttonRect; GUIStyle style;
+			Rect buttonRect;
+			GUIStyle style;
 			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
 
 			// the button may be disabled:
@@ -256,6 +257,24 @@ namespace DRL {
 					GUI.backgroundColor = oldColor;
 				}
 			}
+		}
+
+		public override float GetPropertyHeight(SerializedProperty prop, GUIContent label) {
+			if (_height > 0.5f)
+				return _height;
+
+			var attr = (ButtonAttribute)attribute;
+			var state = GetState(prop, attr.Method);
+			var buttonText = ButtonContent(attr, state, "");
+
+			// Create a fake rect, positioned at (0, 0), width the width of the inspector area
+			var fakeRect = new Rect(
+				0.0f,
+				0.0f,
+				EditorGUIUtility.currentViewWidth, // width of free space in inspector
+				base.GetPropertyHeight(prop, label)
+			);
+			return ButtonRect(attr, fakeRect, buttonText).height;
 		}
 
 	}
