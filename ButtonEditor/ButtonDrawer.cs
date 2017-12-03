@@ -54,13 +54,13 @@ namespace DRL {
 				tooltip =
 					string.IsNullOrEmpty(tooltip) ?
 					msg :
-					$"[{msg}]\n{tooltip}"
+					string.Format("[{0}]\n{1}", msg, tooltip)
 				;
 			} else if (state == State.Multi) {
 				tooltip =
 					string.IsNullOrEmpty(tooltip) ?
 					MultiMsg :
-					$"[{MultiMsg}]\n{tooltip}"
+					string.Format("[{0}]\n{1}", MultiMsg, tooltip)
 				;
 			}
 
@@ -132,10 +132,11 @@ namespace DRL {
 		private static void CallMethod(Object target, string methodName) {
 			var method = GetMethod(target, methodName);
 			if (method == null)
-				Debug.LogError(
-					$"Button on <{target.name}> object:\n" +
-					$"can't perform since the object doesn't have a <{methodName}> method"
-				);
+				Debug.LogError(string.Format(
+					"Button on <{0}> object:\n" +
+					"Can't perform since the object doesn't have a <{1}> method",
+					target.name, methodName
+				));
 			else
 				method.Invoke(target, null);
 		}
