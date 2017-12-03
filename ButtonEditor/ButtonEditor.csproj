@@ -39,9 +39,6 @@
     <Reference Include="UnityEditor">
       <HintPath>..\Managed\UnityEditor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.Graphs">
-      <HintPath>..\Managed\UnityEditor.Graphs.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>..\Managed\UnityEngine.dll</HintPath>
     </Reference>
