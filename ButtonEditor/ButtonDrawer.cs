@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Reflection;
+using UnityEngine;
 using UnityEditor;
 using static UnityEngine.Mathf;
 
@@ -21,12 +22,14 @@ namespace DRL {
 			/// The button is in the inspector with multi-selection.
 			/// </summary>
 			Multi = 1,
-			//Error = 2 // TODO: implement auto-detection of potential errors on button press
+			Error = 2
 		}
 
 		private const string DefalutText = "DO!";
 		private const string MultiMsg = "Multiple objects selected";
 		private static readonly Color MultiColor = new Color(0.8f, 0.5f, 0.1f);
+
+		private const BindingFlags GetMethodFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
 
 		#endregion
 
@@ -37,7 +40,7 @@ namespace DRL {
 		/// containing the provided label and [optionally] tooltip.
 		/// Tooltip could be modified to reflect the unusual state of the button.
 		/// </summary>
-		private static GUIContent ButtonContent(ButtonAttribute attr, State state) {
+		private static GUIContent ButtonContent(ButtonAttribute attr, State state, string errorMessage) {
 			string text = attr.Label.Trim();
 			if (string.IsNullOrEmpty(text))
 				text = DefalutText;
@@ -46,7 +49,14 @@ namespace DRL {
 			var tooltip = attr.Tooltip;
 
 			// modify tooltip for Multi-mode:
-			if (state == State.Multi) {
+			if (state == State.Error) {
+				string msg = "ERROR: " + errorMessage;
+				tooltip =
+					string.IsNullOrEmpty(tooltip) ?
+					msg :
+					$"[{msg}]\n{tooltip}"
+				;
+			} else if (state == State.Multi) {
 				tooltip =
 					string.IsNullOrEmpty(tooltip) ?
 					MultiMsg :
@@ -106,44 +116,117 @@ namespace DRL {
 			);
 		}
 
+		/// <summary>
+		/// Returns Corresponding <see cref="MethodInfo"/> object for the method on the  given target. Could be null.
+		/// </summary>
+		private static MethodInfo GetMethod(Object target, string methodName) {
+			var t = target.GetType();
+			try { return t.GetMethod(methodName, GetMethodFlags); }
+			catch { return null; }
+		}
+
+		/// <summary>
+		/// Calls the specified method on the given <see cref="Object"/>.
+		/// Logs an error to the console if the method is not found.
+		/// </summary>
+		private static void CallMethod(Object target, string methodName) {
+			var method = GetMethod(target, methodName);
+			if (method == null)
+				Debug.LogError(
+					$"Button on <{target.name}> object:\n" +
+					$"can't perform since the object doesn't have a <{methodName}> method"
+				);
+			else
+				method.Invoke(target, null);
+		}
+
+		/// <summary>
+		/// Checks if the button in some error state and generates the appropriate message.
+		/// </summary>
+		/// <returns>True if button is erratic.</returns>
+		private static bool IsErrorState(
+			string methodName, Object[] targets,
+			out string message
+		) {
+			if (string.IsNullOrEmpty(methodName)) {
+				message = "No method provided for button click";
+				return true;
+			}
+
+			if (targets == null || targets.Length == 0) {
+				message = "No objects selected";
+				return true;
+			}
+
+			int okTargets = 0;
+			var numTargets = targets.Length;
+			for (int i = 0; i < numTargets; ++i) {
+				if (GetMethod(targets[i], methodName) != null)
+					++okTargets;
+			}
+			if (okTargets == 0) {
+				message = "Provided method doesn't exist on the selected objects";
+				return true;
+			}
+			if (okTargets < numTargets) {
+				message = "Can't perform action on selected objects because not all of them support it.";
+				return true;
+			}
+
+			message = "";
+			return false;
+		}
+
 		#endregion
 
 		public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label) {
 			var attr = (ButtonAttribute)attribute;
+			var methodName = attr.Method;
 
 			// Detect the state of the buton, which affects it look:
 			State state;
-			UnityEngine.Object[] targets;
-			bool isMulti;
+			Object[] targets;
+			int numTargets;
+			bool isMulti, isError;
+			string errorMessage;
 			{
 				var serObj = prop.serializedObject;
 				targets = serObj.targetObjects;
-				isMulti = serObj.isEditingMultipleObjects || targets.Length > 0;
-				state = isMulti ? State.Multi : State.Normal;
+				numTargets = targets.Length;
+				isMulti = serObj.isEditingMultipleObjects || numTargets > 0;
+				isError = IsErrorState(methodName, targets, out errorMessage);
+				state =
+					isError ?
+					State.Error :
+					(isMulti ? State.Multi : State.Normal)
+				;
 			}
 
 			// Prepare rect, style and content:
-			var buttonText = ButtonContent(attr, state);
+			var buttonText = ButtonContent(attr, state, errorMessage);
 			Rect buttonRect; GUIStyle style;
 			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
 
-			// Now, actually draw the button...
-			isMulti = true;
-			var oldColor = GUI.backgroundColor;
-			if (isMulti) {
-				GUI.backgroundColor = MultiColor;
-			}
-			var isPressed = GUI.Button(buttonRect, buttonText, style);
-			// ... and call the function when the button is pressed:
-			if (isPressed) {
-				var action = attr.ActionMethod;
-				var numTargets = targets.Length;
-				for (var i = 0; i < numTargets; ++i) {
-					action(targets[i]);
+			// the button may be disabled:
+			using (new EditorGUI.DisabledScope(isError)) {
+				// Now, actually draw the button...
+				//isMulti = true;
+				var oldColor = GUI.backgroundColor;
+				if (isMulti) {
+					GUI.backgroundColor = MultiColor;
 				}
-			}
-			if (isMulti) {
-				GUI.backgroundColor = oldColor;
+
+				var isPressed = GUI.Button(buttonRect, buttonText, style);
+				// ... and call the function when the button is pressed:
+				if (isPressed && !isError) {
+					for (var i = 0; i < numTargets; ++i) {
+						CallMethod(targets[i], methodName);
+					}
+				}
+
+				if (isMulti) {
+					GUI.backgroundColor = oldColor;
+				}
 			}
 		}
 
