@@ -178,6 +178,34 @@ namespace DRL {
 			return false;
 		}
 
+		private static State GetState(
+			SerializedProperty prop, string methodName,
+			out Object[] targets, out int numTargets,
+			out bool isMulti, out bool isError, out string errorMessage
+		) {
+			var serObj = prop.serializedObject;
+			targets = serObj.targetObjects;
+			numTargets = targets.Length;
+			isMulti = serObj.isEditingMultipleObjects || numTargets > 1;
+			isError = IsErrorState(methodName, targets, out errorMessage);
+			return
+				isError ?
+				State.Error :
+				(isMulti ? State.Multi : State.Normal)
+			;
+		}
+
+		private static State GetState(SerializedProperty prop, string methodName) {
+			Object[] targets;
+			int numTargets;
+			bool isMulti, isError;
+			string errorMessage;
+			return GetState(
+				prop, methodName,
+				out targets, out numTargets, out isMulti, out isError, out errorMessage
+			);
+		}
+
 		#endregion
 
 		public override void OnGUI(Rect position, SerializedProperty prop, GUIContent label) {
