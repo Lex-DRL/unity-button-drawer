@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Button", "Button\Button.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Src", "_Src\_Src.csproj", "{8C34630A-BEF7-4949-B4D6-278D7FAC491D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ButtonEditor", "ButtonEditor\ButtonEditor.csproj", "{10FA1E70-3699-475C-911B-60DFE6E13DAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{8C34630A-BEF7-4949-B4D6-278D7FAC491D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C34630A-BEF7-4949-B4D6-278D7FAC491D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C34630A-BEF7-4949-B4D6-278D7FAC491D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
