@@ -126,6 +126,25 @@ namespace DRL {
 			var buttonText = ButtonContent(attr, state);
 			Rect buttonRect; GUIStyle style;
 			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
+
+			// Now, actually draw the button...
+			isMulti = true;
+			var oldColor = GUI.backgroundColor;
+			if (isMulti) {
+				GUI.backgroundColor = MultiColor;
+			}
+			var isPressed = GUI.Button(buttonRect, buttonText, style);
+			// ... and call the function when the button is pressed:
+			if (isPressed) {
+				var action = attr.ActionMethod;
+				var numTargets = targets.Length;
+				for (var i = 0; i < numTargets; ++i) {
+					action(targets[i]);
+				}
+			}
+			if (isMulti) {
+				GUI.backgroundColor = oldColor;
+			}
 		}
 
 	}
