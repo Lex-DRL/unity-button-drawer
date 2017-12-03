@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using UnityEngine;
 using UnityEditor;
-using static UnityEngine.Mathf;
 
 namespace DRL {
 	[CustomPropertyDrawer(typeof(ButtonAttribute))]
@@ -89,7 +88,7 @@ namespace DRL {
 			// first, get the desired width in pixels:
 			float srcWidth = position.width;
 			float width = attr.WidthIsRelative ? srcWidth * attr.WidthRelative : attr.WidthAbsolute;
-			width = Min(width, srcWidth);
+			width = Mathf.Min(width, srcWidth);
 
 			// now, take the actual text into account...
 			style = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).button;
@@ -97,19 +96,19 @@ namespace DRL {
 			var expectedSize = style.CalcSize(buttonText);
 			// ... to get auto width, if given width is less then a pixel:
 			if (width < 0.5f) {
-				width = Min(expectedSize.x, srcWidth);
+				width = Mathf.Min(expectedSize.x, srcWidth);
 			}
 			// ... and to calculate the height:
 			if (expectedSize.x > width)
 				style.wordWrap = true;
-			float height = Max(
+			float height = Mathf.Max(
 				style.CalcHeight(buttonText, width),
 				position.height
 			);
 
 			// generate the actual rect:
 			buttonRect = new Rect(
-				position.x + Max(srcWidth - width, 0.0f) * 0.5f,
+				position.x + Mathf.Max(srcWidth - width, 0.0f) * 0.5f,
 				position.y,
 				width,
 				height
