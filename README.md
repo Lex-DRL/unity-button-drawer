@@ -1,1 +1,1 @@
-# unity-button-drawer
+# [Button] attribute for Unity inspector
