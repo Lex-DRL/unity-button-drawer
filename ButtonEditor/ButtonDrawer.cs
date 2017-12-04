@@ -77,15 +77,15 @@ namespace DRL {
 		/// </summary>
 		/// <param name="attrWidth">The given width value, from the <see cref="ButtonAttribute"/>.</param>
 		/// <param name="srcWidth">The maximum width available for the control, depends on inspector size.</param>
-		/// <param name="textWidth">The width defined by the button text.</param>
+		/// <param name="expectedWidth">The width defined entirely by the button text.</param>
 		/// <returns></returns>
-		private static float ButtonWidth(float attrWidth, float srcWidth, float textWidth) {
+		private static float ButtonWidth(float attrWidth, float srcWidth, float expectedWidth) {
 			if (attrWidth > 2.0f) // absolute mode
 				return attrWidth;
 			if (attrWidth > 0.0f) // relative mode
 				return attrWidth * srcWidth;
 			// default mode - by text size
-			return Mathf.Min(textWidth, srcWidth);
+			return Mathf.Min(expectedWidth, srcWidth);
 		}
 
 		/// <summary>
@@ -106,18 +106,19 @@ namespace DRL {
 			// first, init the style and assume the width from it:
 			style = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).button;
 			style.wordWrap = false;
-			var expectedSize = style.CalcSize(buttonText);
+			style.fontSize = (int)(style.fontSize * attr.FontScale);
+			var expectedWidth = style.CalcSize(buttonText).x;
 
 			// get the width in pixels, depending on the mode:
 			float srcWidth = position.width;
 			float width = Mathf.Max(
-				ButtonWidth(attr.Width, srcWidth, expectedSize.x),
-				ButtonWidth(attr.MinWidth, srcWidth, expectedSize.x)
+				ButtonWidth(attr.Width, srcWidth, expectedWidth),
+				ButtonWidth(attr.MinWidth, srcWidth, expectedWidth)
 			);
 			width = Mathf.Min(width, srcWidth);
 
 			// calculate the height:
-			if (expectedSize.x > width)
+			if (expectedWidth > width)
 				style.wordWrap = true;
 			_height = style.CalcHeight(buttonText, width);
 
