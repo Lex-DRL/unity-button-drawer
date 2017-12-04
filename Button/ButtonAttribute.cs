@@ -19,7 +19,7 @@ namespace DRL
 		public readonly float Width;
 		public readonly float MinWidth;
 
-		public readonly float FontScale;
+		public readonly int FontSize;
 
 		/// <summary>
 		/// This attribute adds a button before the affected field.
@@ -42,16 +42,16 @@ namespace DRL
 		/// Essentially, these two arguments are just twins. The resulting width is determined
 		/// as the maximum of these two (clamped to available space).
 		/// </param>
-		/// <param name="fontScale">Multiplier for the size of the button text. 1.0 = "as is".</param>
+		/// <param name="fontSize">Absolute font size. 0 = don't change.</param>
 		public ButtonAttribute(
-			string method, string label, string tooltip="", float width=-1, float minWidth=-1, float fontScale=1
+			string method, string label, string tooltip="", float width=-1, float minWidth=-1, int fontSize=0
 		) {
 			Method = method;
 			Label = label;
 			Tooltip = tooltip;
 			Width = width;
 			MinWidth = minWidth;
-			FontScale = Mathf.Abs(fontScale);
+			FontSize = Mathf.Abs(fontSize);
 		}
 
 	}

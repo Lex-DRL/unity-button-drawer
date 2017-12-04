@@ -106,7 +106,7 @@ namespace DRL {
 			// first, init the style and assume the width from it:
 			style = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).button;
 			style.wordWrap = false;
-			style.fontSize = (int)(style.fontSize * attr.FontScale);
+			style.fontSize = attr.FontSize > 0 ? attr.FontSize : 0;
 			var expectedWidth = style.CalcSize(buttonText).x;
 
 			// get the width in pixels, depending on the mode:
