@@ -10,10 +10,10 @@ namespace DRL {
 		[Button("DoPrint", "Print from parent", "The inherited method is called.")]
 		public bool ccc;
 
-		[Button("DDD", "Erratic button", 100)]
+		[Button("DDD", "Erratic button", "", 100)]
 		public bool ddd;
 
-		[Button("EEE", "Erratic button with tooltip", "WHAAAAT?!")]
+		[Button("EEE", "Erratic button with tooltip", "WHAAAAT?!", 1)]
 		public bool eee;
 
 		public void DoPrintSecond() {
