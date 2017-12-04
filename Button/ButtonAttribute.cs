@@ -22,11 +22,13 @@ namespace DRL
 		public readonly int FontSize;
 
 		/// <summary>
-		/// This attribute adds a button before the affected field.
+		/// This attribute replaces the public field with an interactive button.
+		/// You should use it on special extra bool fields.
 		/// </summary>
 		/// <param name="method">
 		/// The name of the method called on button click.
 		/// The method needs to exist as a member of the <see cref="Object"/>-inferited class you add the button to.
+		/// The method has to be of void type and take no arguments.
 		/// </param>
 		/// <param name="label">[optional] Text displayed on the button. When omitted, the default "DO!" text is used.</param>
 		/// <param name="tooltip">[optional] Text displayed in the popup on mouse hover.</param>
@@ -39,7 +41,7 @@ namespace DRL
 		/// </param>
 		/// <param name="minWidth">
 		/// [optional] Similarily to <see cref="Width"/>, specifies min button size.<para />
-		/// Essentially, these two arguments are just twins. The resulting width is determined
+		/// Essentially, <see cref="Width"/> and <see cref="MinWidth"/> are just twins. The resulting width is determined
 		/// as the maximum of these two (clamped to available space).
 		/// </param>
 		/// <param name="fontSize">Absolute font size. 0 = don't change.</param>
