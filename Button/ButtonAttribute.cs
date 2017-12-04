@@ -12,104 +12,52 @@ namespace DRL
 	/// This static function is passed as the 1st required parameter for this attribute.
 	/// </summary>
 	public class ButtonAttribute : PropertyAttribute {
+		public enum WidthModes {
+			Default = 0,
+			Absolute = 1,
+			Relative = 2
+		}
+
 		public readonly string Method;
 		public readonly string Label;
 		public readonly string Tooltip;
 
-		public readonly bool WidthIsRelative = true;
-		public readonly int WidthAbsolute = 0;
-		public readonly float WidthRelative = 1.0f;
-
-		#region Constructors
+		public readonly WidthModes WidthMode;
+		public readonly float Width = 0.0f;
 
 		/// <summary>
 		/// This attribute adds a button before the affected field.
 		/// </summary>
 		/// <param name="method">
 		/// The name of the method called on button click.
-		/// The method needs to exist as a member of the class you add the button to.
+		/// The method needs to exist as a member of the <see cref="Object"/>-inferited class you add the button to.
 		/// </param>
-		/// <param name="label">Test displayed on the button.</param>
+		/// <param name="label">Text displayed on the button.</param>
 		/// <param name="tooltip">[optional] Text displayed in the popup on mouse hover.</param>
+		/// <param name="width">[optional] Width of the button:<para />
+		/// less then 0.0 - use the default width (fit it the text length);<para />
+		/// from 0.0 to 2.0 - use as relative width, as the fraction of default control size;<para />
+		/// more than 2.0 - use as absolute width, in pixels.<para />
+		/// The width is clamped to available space in the inspector. So values from 1.0 to 2.0
+		/// essentially stretch the button to the entire inspector width.
+		/// </param>
 		public ButtonAttribute(
-			string method, string label, string tooltip
+			string method, string label, string tooltip="", float width=-1.0f
 		) {
 			Method = method;
 			Label = label;
 			Tooltip = tooltip;
+
+			if (width.Equals(0.0f) || width < 0.0f) { // default mode
+				WidthMode = WidthModes.Default;
+			} else if (width > 2.0f) { // absolute mode
+				WidthMode = WidthModes.Absolute;
+				Width = width;
+			} else {
+				WidthMode = WidthModes.Relative;
+				Width = width;
+			}
 		}
 
-		/// <summary>
-		/// This attribute adds a button before the affected field.
-		/// </summary>
-		/// <param name="method">
-		/// The name of the method called on button click.
-		/// The method needs to exist as a member of the class you add the button to.
-		/// </param>
-		/// <param name="label">Test displayed on the button.</param>
-		public ButtonAttribute(
-			string method, string label
-		) : this(method, label, "") { }
-
-		/// <summary>
-		/// This attribute adds a button before the affected field.
-		/// </summary>
-		/// <param name="method">
-		/// The name of the method called on button click.
-		/// The method needs to exist as a member of the class you add the button to.
-		/// </param>
-		/// <param name="label">Test displayed on the button.</param>
-		/// <param name="tooltip">[optional] Text displayed in the popup on mouse hover.</param>
-		/// <param name="widthRel">[optional] Relative width of the button (from 0.0 to 1.0)</param>
-		public ButtonAttribute(
-			string method, string label, string tooltip, float widthRel
-		) : this(method, label, tooltip) {
-			WidthRelative = widthRel;
-		}
-
-		/// <summary>
-		/// This attribute adds a button before the affected field.
-		/// </summary>
-		/// <param name="method">
-		/// The name of the method called on button click.
-		/// The method needs to exist as a member of the class you add the button to.
-		/// </param>
-		/// <param name="label">Test displayed on the button.</param>
-		/// <param name="tooltip">[optional] Text displayed in the popup on mouse hover.</param>
-		/// <param name="widthAbs">[optional] Absolute width of the button (in pixels).</param>
-		public ButtonAttribute(
-			string method, string label, string tooltip, int widthAbs
-		) : this(method, label, tooltip) {
-			WidthIsRelative = false;
-			WidthAbsolute = widthAbs;
-		}
-
-		/// <summary>
-		/// This attribute adds a button before the affected field.
-		/// </summary>
-		/// <param name="method">
-		/// The name of the method called on button click.
-		/// The method needs to exist as a member of the class you add the button to.
-		/// </param>
-		/// <param name="label">Test displayed on the button.</param>
-		/// <param name="widthRel">[optional] Relative width of the button (from 0.0 to 1.0)</param>
-		public ButtonAttribute(
-			string method, string label, float widthRel
-		) : this(method, label, "", widthRel) { }
-
-		/// <summary>
-		/// This attribute adds a button before the affected field.
-		/// </summary>
-		/// <param name="method">
-		/// The name of the method called on button click.
-		/// The method needs to exist as a member of the class you add the button to.
-		/// </param>
-		/// <param name="label">Test displayed on the button.</param>
-		/// <param name="widthAbs">[optional] Absolute width of the button (in pixels).</param>
-		public ButtonAttribute(
-			string method, string label, int widthAbs
-		) : this(method, label, "", widthAbs) { }
-
-		#endregion
 	}
 }

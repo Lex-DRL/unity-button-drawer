@@ -83,33 +83,40 @@ namespace DRL {
 		/// It's based on the default stule for inspector button, but has it's <see cref="GUIStyle.wordWrap"/> set
 		/// acctordingly to the given button content.
 		/// </param>
-		private void ButtonRectAndStyle(
+		private Rect ButtonRectAndStyle(
 			ButtonAttribute attr, Rect position, GUIContent buttonText,
-			out Rect buttonRect, out GUIStyle style
+			out GUIStyle style
 		) {
-			// first, get the desired width in pixels:
-			float srcWidth = position.width;
-			float width = attr.WidthIsRelative ? srcWidth * attr.WidthRelative : attr.WidthAbsolute;
-			width = Mathf.Min(width, srcWidth);
-
-			// now, take the actual text into account...
+			// first, init the style and assume the width from it:
 			style = EditorGUIUtility.GetBuiltinSkin(EditorSkin.Inspector).button;
 			style.wordWrap = false;
 			var expectedSize = style.CalcSize(buttonText);
-			// ... to get auto width, if given width is less then a pixel:
-			if (width < 0.5f) {
-				width = Mathf.Min(expectedSize.x, srcWidth);
+
+			// get the desired width in pixels, depending on the mode:
+			float srcWidth = position.width;
+			float width;
+			{
+				switch (attr.WidthMode) {
+				case ButtonAttribute.WidthModes.Absolute:
+					width = attr.Width;
+					break;
+				case ButtonAttribute.WidthModes.Relative:
+					width = attr.Width * srcWidth;
+					break;
+				default:
+					width = Mathf.Min(expectedSize.x, srcWidth);
+					break;
+				}
+				width = Mathf.Min(width, srcWidth);
 			}
-			// ... and to calculate the height:
+
+			// calculate the height:
 			if (expectedSize.x > width)
 				style.wordWrap = true;
-			_height = Mathf.Max(
-				style.CalcHeight(buttonText, width),
-				position.height
-			);
+			_height = style.CalcHeight(buttonText, width);
 
 			// generate the actual rect:
-			buttonRect = new Rect(
+			return new Rect(
 				position.x + Mathf.Max(srcWidth - width, 0.0f) * 0.5f,
 				position.y,
 				width,
@@ -118,10 +125,8 @@ namespace DRL {
 		}
 
 		private Rect ButtonRect(ButtonAttribute attr, Rect position, GUIContent buttonText) {
-			Rect buttonRect;
 			GUIStyle style;
-			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
-			return buttonRect;
+			return ButtonRectAndStyle(attr, position, buttonText, out style);
 		}
 
 		/// <summary>
@@ -232,9 +237,8 @@ namespace DRL {
 
 			// Prepare rect, style and content:
 			var buttonText = ButtonContent(attr, state, errorMessage);
-			Rect buttonRect;
 			GUIStyle style;
-			ButtonRectAndStyle(attr, position, buttonText, out buttonRect, out style);
+			var buttonRect = ButtonRectAndStyle(attr, position, buttonText, out style);
 
 			// the button may be disabled:
 			using (new EditorGUI.DisabledScope(isError)) {
