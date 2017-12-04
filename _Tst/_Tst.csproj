@@ -7,8 +7,8 @@
     <ProjectGuid>{8C34630A-BEF7-4949-B4D6-278D7FAC491D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_Src</RootNamespace>
-    <AssemblyName>_Src</AssemblyName>
+    <RootNamespace>_Tst</RootNamespace>
+    <AssemblyName>_Tst</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

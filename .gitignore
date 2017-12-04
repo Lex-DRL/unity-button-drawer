@@ -1,8 +1,8 @@
 ## DRL:
-_Src/*/
-_Src/*.cs
-_Src/*.cs.meta
-!_Src/Properties/
+_Tst/*/
+_Tst/*.cs
+_Tst/*.cs.meta
+!_Tst/Properties/
 
 Managed/*
 

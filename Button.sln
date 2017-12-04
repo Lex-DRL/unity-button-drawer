@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Button", "Button\Button.csproj", "{FE1D5385-E239-4F41-8711-9C3BD38AEABD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Src", "_Src\_Src.csproj", "{8C34630A-BEF7-4949-B4D6-278D7FAC491D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Tst", "_Tst\_Tst.csproj", "{8C34630A-BEF7-4949-B4D6-278D7FAC491D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ButtonEditor", "ButtonEditor\ButtonEditor.csproj", "{10FA1E70-3699-475C-911B-60DFE6E13DAF}"
 EndProject
