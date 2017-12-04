@@ -47,20 +47,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorSpacer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptsGUI\ButtonAttribute.cs" />
-    <Compile Include="ScriptsGUI\ButtonAttributeExample.cs" />
-    <Compile Include="ScriptsGUI\InlineVectorAttribute.cs" />
-    <Compile Include="ScriptsGUI\ObjectWithSelectButtonAttribute.cs" />
-    <Compile Include="ShadersGUI\DropdownData.cs" />
-    <Compile Include="ShadersGUI\Editor\BlendModeDrawer.cs" />
-    <Compile Include="ShadersGUI\Editor\ClearingKeywordsGUI.cs" />
-    <Compile Include="ShadersGUI\Editor\CompactTextureDrawer.cs" />
-    <Compile Include="ShadersGUI\Editor\DRL_CommonData.cs" />
-    <Compile Include="ShadersGUI\Editor\DropdownKeywordsDrawer.cs" />
-    <Compile Include="ShadersGUI\Editor\ToggleLeftDrawer.cs" />
-    <Compile Include="ShadersGUI\ShaderCollectionWithWarmUpAttribute.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
