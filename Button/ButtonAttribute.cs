@@ -1,4 +1,8 @@
-﻿using UnityEngine;
+﻿// This script is a part of [Button] attribute.
+// Grab the latest version at: https://github.com/Lex-DRL/unity-button-drawer
+
+
+using UnityEngine;
 
 namespace DRL
 {
