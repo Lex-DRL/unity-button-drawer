@@ -72,21 +72,20 @@ namespace DRL {
 		}
 
 		/// <summary>
-		/// Calculate the actual width of the button, in pixels. It depends on the mode.
+		/// Calculate the desired width of the button, in pixels. It depends on the mode.
+		/// It's not clamped to available space.
 		/// </summary>
 		/// <param name="attrWidth">The given width value, from the <see cref="ButtonAttribute"/>.</param>
 		/// <param name="srcWidth">The maximum width available for the control, depends on inspector size.</param>
 		/// <param name="textWidth">The width defined by the button text.</param>
 		/// <returns></returns>
 		private static float ButtonWidth(float attrWidth, float srcWidth, float textWidth) {
-			float width;
 			if (attrWidth > 2.0f) // absolute mode
-				width = attrWidth;
-			else if (attrWidth > 0.0f) // relative
-				width = attrWidth * srcWidth;
-			else // default mode - by text size
-				width = Mathf.Min(textWidth, srcWidth);
-			return Mathf.Min(width, srcWidth);
+				return attrWidth;
+			if (attrWidth > 0.0f) // relative mode
+				return attrWidth * srcWidth;
+			// default mode - by text size
+			return Mathf.Min(textWidth, srcWidth);
 		}
 
 		/// <summary>
@@ -109,9 +108,13 @@ namespace DRL {
 			style.wordWrap = false;
 			var expectedSize = style.CalcSize(buttonText);
 
-			// get the desired width in pixels, depending on the mode:
+			// get the width in pixels, depending on the mode:
 			float srcWidth = position.width;
-			float width = ButtonWidth(attr.Width, srcWidth, expectedSize.x);
+			float width = Mathf.Max(
+				ButtonWidth(attr.Width, srcWidth, expectedSize.x),
+				ButtonWidth(attr.MinWidth, srcWidth, expectedSize.x)
+			);
+			width = Mathf.Min(width, srcWidth);
 
 			// calculate the height:
 			if (expectedSize.x > width)

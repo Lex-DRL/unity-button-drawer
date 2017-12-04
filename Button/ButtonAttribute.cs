@@ -17,6 +17,7 @@ namespace DRL
 		public readonly string Tooltip;
 
 		public readonly float Width;
+		public readonly float MinWidth;
 
 		/// <summary>
 		/// This attribute adds a button before the affected field.
@@ -34,13 +35,19 @@ namespace DRL
 		/// The width is clamped to available space in the inspector. So values from 1.0 to 2.0
 		/// essentially stretch the button to the entire inspector width.
 		/// </param>
+		/// <param name="minWidth">
+		/// [optional] Similarily to <see cref="width"/>, specifies min button size.<para />
+		/// Essentially, these two arguments are just twins. The resulting width is determined
+		/// as the maximum of these two (clamped to available space).
+		/// </param>
 		public ButtonAttribute(
-			string method, string label, string tooltip="", float width=-1.0f
+			string method, string label, string tooltip="", float width=-1, float minWidth=-1
 		) {
 			Method = method;
 			Label = label;
 			Tooltip = tooltip;
 			Width = width;
+			MinWidth = minWidth;
 		}
 
 	}
