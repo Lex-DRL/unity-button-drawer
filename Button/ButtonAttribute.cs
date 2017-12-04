@@ -28,7 +28,7 @@ namespace DRL
 		/// The name of the method called on button click.
 		/// The method needs to exist as a member of the <see cref="Object"/>-inferited class you add the button to.
 		/// </param>
-		/// <param name="label">Text displayed on the button.</param>
+		/// <param name="label">[optional] Text displayed on the button. When omitted, the default "DO!" text is used.</param>
 		/// <param name="tooltip">[optional] Text displayed in the popup on mouse hover.</param>
 		/// <param name="width">[optional] Width of the button:<para />
 		/// less then 0.0 - use the default width (fit to the text length);<para />
@@ -44,7 +44,7 @@ namespace DRL
 		/// </param>
 		/// <param name="fontSize">Absolute font size. 0 = don't change.</param>
 		public ButtonAttribute(
-			string method, string label, string tooltip="", float width=-1, float minWidth=-1, int fontSize=0
+			string method, string label="", string tooltip="", float width=-1, float minWidth=-1, int fontSize=0
 		) {
 			Method = method;
 			Label = label;
