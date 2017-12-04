@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_Src", "_Src\_Src.csproj", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ButtonEditor", "ButtonEditor\ButtonEditor.csproj", "{10FA1E70-3699-475C-911B-60DFE6E13DAF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Examples", "Examples\Examples.csproj", "{7D7DB005-63A9-419B-97DD-21C5960D4A93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10FA1E70-3699-475C-911B-60DFE6E13DAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D7DB005-63A9-419B-97DD-21C5960D4A93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D7DB005-63A9-419B-97DD-21C5960D4A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D7DB005-63A9-419B-97DD-21C5960D4A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D7DB005-63A9-419B-97DD-21C5960D4A93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
