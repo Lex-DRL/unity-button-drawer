@@ -38,7 +38,7 @@ namespace DRL
 		/// essentially stretch the button to the entire inspector width.
 		/// </param>
 		/// <param name="minWidth">
-		/// [optional] Similarily to <see cref="width"/>, specifies min button size.<para />
+		/// [optional] Similarily to <see cref="Width"/>, specifies min button size.<para />
 		/// Essentially, these two arguments are just twins. The resulting width is determined
 		/// as the maximum of these two (clamped to available space).
 		/// </param>
