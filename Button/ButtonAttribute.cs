@@ -23,7 +23,7 @@ namespace DRL
 		public readonly string Tooltip;
 
 		public readonly WidthModes WidthMode;
-		public readonly float Width = 0.0f;
+		public readonly float Width;
 
 		/// <summary>
 		/// This attribute adds a button before the affected field.
@@ -35,7 +35,7 @@ namespace DRL
 		/// <param name="label">Text displayed on the button.</param>
 		/// <param name="tooltip">[optional] Text displayed in the popup on mouse hover.</param>
 		/// <param name="width">[optional] Width of the button:<para />
-		/// less then 0.0 - use the default width (fit it the text length);<para />
+		/// less then 0.0 - use the default width (fit to the text length);<para />
 		/// from 0.0 to 2.0 - use as relative width, as the fraction of default control size;<para />
 		/// more than 2.0 - use as absolute width, in pixels.<para />
 		/// The width is clamped to available space in the inspector. So values from 1.0 to 2.0
@@ -47,16 +47,14 @@ namespace DRL
 			Method = method;
 			Label = label;
 			Tooltip = tooltip;
+			Width = width;
 
-			if (width.Equals(0.0f) || width < 0.0f) { // default mode
+			if (width.Equals(0.0f) || width < 0.0f) // default mode
 				WidthMode = WidthModes.Default;
-			} else if (width > 2.0f) { // absolute mode
+			else if (width > 2.0f) // absolute mode
 				WidthMode = WidthModes.Absolute;
-				Width = width;
-			} else {
+			else
 				WidthMode = WidthModes.Relative;
-				Width = width;
-			}
 		}
 
 	}
