@@ -1,4 +1,8 @@
-﻿using System.Reflection;
+﻿// This script is a part of [Button] attribute.
+// Grab the latest version at: https://github.com/Lex-DRL/unity-button-drawer
+
+
+using System.Reflection;
 using UnityEngine;
 using UnityEditor;
 
