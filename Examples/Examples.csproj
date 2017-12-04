@@ -42,7 +42,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ButtonExample1.cs" />
+    <Compile Include="ButtonExample2.cs" />
+    <Compile Include="ButtonExampleB.cs" />
+    <Compile Include="ContainerExample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Button\Button.csproj">
+      <Project>{fe1d5385-e239-4f41-8711-9c3bd38aeabd}</Project>
+      <Name>Button</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
