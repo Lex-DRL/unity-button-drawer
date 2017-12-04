@@ -12,17 +12,10 @@ namespace DRL
 	/// This static function is passed as the 1st required parameter for this attribute.
 	/// </summary>
 	public class ButtonAttribute : PropertyAttribute {
-		public enum WidthModes {
-			Default = 0,
-			Absolute = 1,
-			Relative = 2
-		}
-
 		public readonly string Method;
 		public readonly string Label;
 		public readonly string Tooltip;
 
-		public readonly WidthModes WidthMode;
 		public readonly float Width;
 
 		/// <summary>
@@ -48,13 +41,6 @@ namespace DRL
 			Label = label;
 			Tooltip = tooltip;
 			Width = width;
-
-			if (width.Equals(0.0f) || width < 0.0f) // default mode
-				WidthMode = WidthModes.Default;
-			else if (width > 2.0f) // absolute mode
-				WidthMode = WidthModes.Absolute;
-			else
-				WidthMode = WidthModes.Relative;
 		}
 
 	}
