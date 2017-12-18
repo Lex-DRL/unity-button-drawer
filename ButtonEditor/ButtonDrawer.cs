@@ -39,7 +39,7 @@ namespace DRL {
 		private const string MultiMsg = "[Multiple objects selected]";
 		private static readonly Color MultiColor = new Color(1.0f, 0.7f, 0.4f);
 
-		private const BindingFlags GetMethodFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static;
+		private const BindingFlags GetMethodFlags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic;
 
 		#endregion
 
