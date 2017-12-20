@@ -6,9 +6,11 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
+using System;
 using System.Reflection;
 using UnityEngine;
 using UnityEditor;
+using Object = UnityEngine.Object;
 
 namespace DRL {
 	[CustomPropertyDrawer(typeof(ButtonAttribute))]
@@ -50,31 +52,40 @@ namespace DRL {
 		/// containing the provided label and [optionally] tooltip.
 		/// Tooltip could be modified to reflect the unusual state of the button.
 		/// </summary>
-		private static GUIContent ButtonContent(ButtonAttribute attr, State state, string errorMessage) {
+		private static GUIContent ButtonContent(
+			ButtonAttribute attr, State state, string errorMessage, GUIContent srcLabel
+		) {
+			Func<string, bool> isEmptyStr = string.IsNullOrEmpty;
+
 			string text = attr.Label.Trim();
-			if (string.IsNullOrEmpty(text))
+			if (isEmptyStr(text))
+				text = srcLabel.text;
+			if (isEmptyStr(text))
 				text = DefalutText;
+
 			var tooltip = attr.Tooltip;
+			if (isEmptyStr(tooltip))
+				tooltip = srcLabel.tooltip;
 
 			// modify text for non-regular modes:
 			if (state == State.Error) {
 				string msg = string.Format("[ERROR: {0}]", errorMessage);
 				tooltip =
-					string.IsNullOrEmpty(tooltip) ?
+					isEmptyStr(tooltip) ?
 					msg :
 					msg + "\n" + tooltip
 				;
 				text = "[ERROR] " + text;
 			} else if (state == State.Multi) {
 				tooltip =
-					string.IsNullOrEmpty(tooltip) ?
+					isEmptyStr(tooltip) ?
 					MultiMsg :
 					string.Format("{0}\n{1}", tooltip, MultiMsg)
 				;
 			}
 
 			GUIContent buttonText = new GUIContent(text);
-			if (!string.IsNullOrEmpty(tooltip))
+			if (!isEmptyStr(tooltip))
 				buttonText.tooltip = tooltip;
 			return buttonText;
 		}
@@ -253,7 +264,7 @@ namespace DRL {
 			);
 
 			// Prepare rect, style and content:
-			var buttonText = ButtonContent(attr, state, errorMessage);
+			var buttonText = ButtonContent(attr, state, errorMessage, label);
 			GUIStyle style;
 			var buttonRect = ButtonRectAndStyle(attr, position, buttonText, out style);
 
@@ -285,7 +296,7 @@ namespace DRL {
 
 			var attr = (ButtonAttribute)attribute;
 			var state = GetState(prop, attr.Method);
-			var buttonText = ButtonContent(attr, state, "");
+			var buttonText = ButtonContent(attr, state, "", label);
 
 			// Create a fake rect, positioned at (0, 0), width the width of the inspector area
 			var fakeRect = new Rect(

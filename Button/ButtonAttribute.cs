@@ -57,8 +57,8 @@ namespace DRL
 			string method, string label="", string tooltip="", float width=-1, float minWidth=-1, int fontSize=0
 		) {
 			Method = method;
-			Label = label;
-			Tooltip = tooltip;
+			Label = label == null ? "" : label;
+			Tooltip = tooltip == null ? "" : tooltip;
 			Width = width;
 			MinWidth = minWidth;
 			FontSize = Mathf.Abs(fontSize);
